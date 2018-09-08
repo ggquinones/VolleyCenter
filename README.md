@@ -1,3 +1,3 @@
 # VolleyCenter
-Scripts to aggregate, process, and display stats. for American volleyball players playing in the NCAA following conference league(s):
+Scripts to aggregate, process, and display stats. for volleyball players in the following NCAA conference league(s):
   1) Summit League
