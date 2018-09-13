@@ -13,6 +13,53 @@ def getSoup(link):
 	soup = BeautifulSoup(html,'html.parser')
 	return soup
 
+def getSummaryTables(teamNum,allDivTables,team1Sum,team2Sum):
+	#extract as method later getGameOverview()
+	currTable = allDivTables[teamNum].find("table") # First table is game overview stuff, Second is Team1 then Team2.
+	tableRows = currTable.find_all("tr")
+	sheet =[]
+	for tr in tableRows:
+		td = tr.find_all("td")
+		th = tr.find_all("th")
+		data = td + th
+		row = []
+		for cell in data:
+			noWeirdSpacing = re.sub("(\s)+[*]"," ",cell.text.strip().encode("utf-8"),0, re.DOTALL)			
+			row.append(noWeirdSpacing)		
+		sheet.append(row)
+	
+	team1Table = team1Sum[0].find("table") # First table is game overview stuff, Second is Team1 then Team2.
+	tableRows = team1Table.find_all("tr")
+	
+	for tr in tableRows:
+		td = tr.find_all("td")
+		th = tr.find_all("th")
+		data = td + th
+		row = []
+		for cell in data:
+			noWeirdSpacing = re.sub("(\s)+[*]"," ",cell.text.strip().encode("utf-8"),0, re.DOTALL)			
+			row.append(noWeirdSpacing)		
+		sheet.append(row)
+		
+	team2Table = team2Sum[0].find("table") # First table is game overview stuff, Second is Team1 then Team2.
+	tableRows = team2Table.find_all("tr")
+	
+	for tr in tableRows:
+		td = tr.find_all("td")
+		th = tr.find_all("th")
+		data = td + th
+		row = []
+		for cell in data:
+			noWeirdSpacing = re.sub("(\s)+[*]"," ",cell.text.strip().encode("utf-8"),0, re.DOTALL)			
+			row.append(noWeirdSpacing)		
+		sheet.append(row)
+		
+	
+	
+	
+	##
+	return sheet
+
 def getTeamBoxscore(teamNum,allDivTables):
 	currTable = allDivTables[teamNum].find("table") # First table is game overview stuff, Second is Team1 then Team2.
 	tableRows = currTable.find_all("tr")
@@ -38,13 +85,30 @@ def formatSheet(varSheet):
 	varSheet.pop(1)
 	return varSheet
 
-soup = getSoup("http://www.thesummitleague.org/sports/wvball/2017-18/boxscores/20170825_o99i.xml")
-sauce = soup.find_all("div",class_="stats-fullbox clearfix")
-bs1 = formatSheet(getTeamBoxscore(1,sauce))
-bs2 = formatSheet(getTeamBoxscore(2,sauce))
-data = OrderedDict()
-data.update({"Sheet 1": bs1})
-data.update({"Sheet 2": bs2})
-save_data("test.ods", data)
+def extractBoxScoreLinks():
+	with open("linksToBoxScores.txt") as f:
+		links = f.readlines()
+	# you may also want to remove whitespace characters like `\n` at the end of each line
+		links = [x.strip() for x in links] 
+		return links
 
+def processLinks():		
+	links = extractBoxScoreLinks()
+	ct = 0
+	for link in links:
+		soup = getSoup(link)
+		sauce = soup.find_all("div",class_="stats-fullbox clearfix")
+		team1Summary = soup.find_all("div",class_="stats-halfbox-left")
+		team2Summary = soup.find_all("div",class_="stats-halfbox-right")
+		ss = getSummaryTables(0,sauce,team1Summary,team2Summary)
+		bs1 = formatSheet(getTeamBoxscore(1,sauce))
+		bs2 = formatSheet(getTeamBoxscore(2,sauce))
+		data = OrderedDict()
+		data.update({"Sheet 1": ss})
+		data.update({"Sheet 2": bs1})
+		data.update({"Sheet 3": bs2})
+		
+		save_data("2017-2018/game"+str(ct)+".ods", data)
+		ct += 1
 
+processLinks()
