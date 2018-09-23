@@ -100,15 +100,18 @@ def processLinks():
 		sauce = soup.find_all("div",class_="stats-fullbox clearfix")
 		team1Summary = soup.find_all("div",class_="stats-halfbox-left")
 		team2Summary = soup.find_all("div",class_="stats-halfbox-right")
-		ss = getSummaryTables(0,sauce,team1Summary,team2Summary)
+		#ss = getSummaryTables(0,sauce,team1Summary,team2Summary)
 		bs1 = formatSheet(getTeamBoxscore(1,sauce))
 		bs2 = formatSheet(getTeamBoxscore(2,sauce))
-		data = OrderedDict()
-		data.update({"Sheet 1": ss})
-		data.update({"Sheet 2": bs1})
-		data.update({"Sheet 3": bs2})
+		print(bs1[-1])
+		print(bs2[-1])
+		print("-------------------------")
+		#data = OrderedDict()
+		#data.update({"Sheet 1": ss})
+		#data.update({"Sheet 2": bs1})
+		#data.update({"Sheet 3": bs2})
 		
-		save_data("2017-2018/game"+str(ct)+".ods", data)
-		ct += 1
+		#save_data("game"+str(ct)+".ods", data)
+		#ct += 1
 
 processLinks()
