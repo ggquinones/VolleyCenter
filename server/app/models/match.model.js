@@ -4,9 +4,14 @@ const MatchSchema = mongoose.Schema({
     team1: String,
     team2:String,
     sets:[],
-    pointDistribution:[[]],
-    team1HittingDistribution:[[]],
-    team2HittingDistribution:[[]],
+    gameNumber:Number,
+    boxscorelink:String,
+    season:String,
+    pointsHeader:[],
+    team1Points:[],
+    team2Points:[]
+    //team1HittingDistribution:[[]],
+    //team2HittingDistribution:[[]]
 }, {
     timestamps: true
 });

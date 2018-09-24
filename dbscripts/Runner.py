@@ -9,15 +9,17 @@ from Match import Match
 
 def mainRunner(link):
 	bxscLinks = getBoxScoreLinks(getSoup(link))
-	season = re.search('(\d)+-(\d)+',link).group(0)
+	season = re.search(r'(\d)+-(\d)+',link).group(0)
+	gameNumber = 0
 	for link in bxscLinks:
-		currMatch = Match(getSoup(link).find("div",class_="stats-wrapper clearfix"))
-		#toString(currMatch)
+		currMatch = Match(getSoup(link).find("div",class_="stats-wrapper clearfix"),season,gameNumber,link)
 		matches = json.dumps(currMatch.__dict__)
-		#this one was working last
-		r = http_post("http://localhost:3000/matches",currMatch.__dict__)
-		#r = requests.post(url ="https://acs567-ggquinones.c9users.io/enter/match", data = matches)
+		headers = {'content-type': 'application/json'}
+		#Un-comment this line to send Matches to API route 
+		r = requests.post("http://localhost:4000/matches",data=matches,headers=headers)
+		gameNumber+=1
 		print(matches)
+	#print(gameNumber)
 		
 def getSoup(link):	
 	response = requests.get(link)

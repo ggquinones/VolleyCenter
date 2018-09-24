@@ -3,7 +3,7 @@ const Match = require('../models/match.model.js');
 // Create and Save a new Note
 exports.create = (req, res) => {
     // Validate request
-    //console.log(req.body)
+    console.log(req.body);
     if(!req.body.team1) {
         return res.status(400).send({
             message: "Team1 cannot be empty"
@@ -19,11 +19,13 @@ exports.create = (req, res) => {
     // Create a Match
     const match = new Match({
         team1: req.body.team1 || "NA", 
-        team2: req.body.team1 || "NA", 
+        team2: req.body.team2 || "NA", 
         sets: req.body.sets || [], 
-        pointDistribution: req.body.pointDistribution || [[]], 
-        team1HittingDistribution: req.body.team1HittingDistribution || [[]],
-        team2HittingDistribution: req.body.team2HittingDistribution || [[]], 
+        pointsHeader: req.body.pointsHeader || [], 
+        team1Points: req.body.team1Points || [], 
+        team2Points: req.body.team2Points || []
+        //team1HittingDistribution: req.body.team1HittingDistribution || [[]],
+        //team2HittingDistribution: req.body.team2HittingDistribution || [[]], 
     });
 
     // Save Note in the database
