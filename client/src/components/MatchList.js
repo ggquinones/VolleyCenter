@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import PointsHeader from '../components/PointsHeader';
+import TeamPoints from '../components/TeamPoints';
 import axios from 'axios';
 
 export default class MatchesList extends Component {
@@ -21,27 +22,18 @@ export default class MatchesList extends Component {
    
   
     return (
-      <div>
+      <div >
        { this.state.matches.map(match => 
-        <div key={match._id}>
-          <h1>{match.team1} vs {match.team2}</h1>
-          <table>
+        <div key={match._id} className="" >
+          <h2>{match.team1} vs {match.team2}</h2>
+          <table  className="table-striped table-dark text-center" style={{margin:'auto',width:'50%'}}>
+            
             <tbody>
-            <tr>
-            <td>
-                {match["pointsHeader"].join(" ")}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                {match["team1Points"].join(" ")}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                {match["team2Points"].join(" ")}
-              </td>
-            </tr>
+            
+            <PointsHeader pointsHeader={match["pointsHeader"]} />
+            <TeamPoints teamPoints={match["team1Points"]} />
+            <TeamPoints teamPoints={match["team2Points"]} />
+            
             </tbody>
           </table>
         </div>
